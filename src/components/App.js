@@ -24,7 +24,6 @@ function App() {
 
   return (
     <div className="ui container">
-     
       {movies.length > 0 ? (
         <AppContext.Provider value={{ toggleFeatured }}>
           <MovieList movies={movies} />
