@@ -1,8 +1,10 @@
 import React, { useState, useEffect, createContext } from "react";
-import { films as data } from "../data";
+import { films as data, tags, genres,  } from "../data";
 import _orderBy from "lodash/orderBy";
 import Message from "./messages/Message";
 import MovieList from "./movies/MovieList";
+import MovieForm from "./forms/MovieForm";
+
 
 export const AppContext = createContext();
 
@@ -25,9 +27,10 @@ function App() {
   return (
     <div className="ui container">
       {movies.length > 0 ? (
-        <AppContext.Provider value={{ toggleFeatured }}>
-          <MovieList movies={movies} />
-        </AppContext.Provider>
+        <MovieForm tagsList={tags} genresList={genres}/>
+        // <AppContext.Provider value={{ toggleFeatured }}>
+        //   <MovieList movies={movies} />
+        // </AppContext.Provider> 
       ) : (
         <Message icon={"bell"} color={"olive"}>
           There is no data yet
