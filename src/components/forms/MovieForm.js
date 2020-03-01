@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import ReactImageFallback from "react-image-fallback";
 const inititalData = {
   title: "",
   director: "",
@@ -12,10 +12,6 @@ const inititalData = {
 
 const MovieForm = ({ tagsList, genresList }) => {
   const [movies, setMovies] = useState(inititalData);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState("");
-  const [genre, setGenre] = useState("");
-  const [multiTags, setMultiTags] = useState([]);
 
   const handleStringChange = ({ target }) => {
     setMovies({ ...movies, [target.name]: target.value });
@@ -29,94 +25,13 @@ const MovieForm = ({ tagsList, genresList }) => {
     setMovies({ ...movies, [target.name]: target.checked });
   };
 
-  const handleTags = id => e => {
-    setSelectedTags(selectedTags =>
-      selectedTags.includes(id) ? selectedTags.filter(t => t !== id) : [...selectedTags, id]
-    );
-  };
-
-  const handleGenre = id => e => {
-    setSelectedGenre(id);
-  };
-
   const handleSubmit = e => {
     e.preventDefault();
     console.log(movies);
   };
 
-  const handleSelect = ({ target }) => {
-    setGenre(target.value);
-  };
-
-  const handleMultiSelect = ({ target }) => {
-    const multiSelect = [...target.selectedOptions].map(o => o.value);
-    console.log(target.selectedOptions);
-    setMultiTags(multiSelect);
-  };
-
   return (
     <div className="ui stackable grid">
-      <div className="ui grid">
-        <div className="four wide column">
-          <div className="grouped fields">
-            <label>Tags</label>
-            {tagsList.map(tag => (
-              <div className="field" key={tag._id}>
-                <div className="ui checkbox">
-                  <input
-                    type="checkbox"
-                    id={tag._id}
-                    onChange={handleTags(tag._id)}
-                    checked={selectedTags.includes(tag._id)}
-                  />
-                  <label htmlFor={tag._id}>{tag.title}</label>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="four wide column">
-          <div className="grouped fields">
-            <label>Genres</label>
-            {genresList.map(genre => (
-              <div className="field" key={genre._id}>
-                <div className="ui radio checkbox">
-                  <input
-                    type="radio"
-                    name="example2"
-                    id={`genre${genre._id}`}
-                    onChange={handleGenre(genre._id)}
-                    checked={selectedGenre === genre._id}
-                  />
-                  <label htmlFor={`genre ${genre._id}`}>{genre.title}</label>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="four wide column">
-          <select className="ui dropdown" onChange={handleSelect} value={genre}>
-            {genresList.map(genre => (
-              <option value={genre._id} key={genre._id}>
-                {genre.title}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="four wide column">
-          <select multiple size={tagsList.length} value={multiTags} onChange={handleMultiSelect}>
-            {tagsList.map(tag => (
-              <option value={tag._id} key={tag._id}>
-                {tag.title}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
       <form className="ui form">
         <div className="ui  grid">
           <div className="twelve wide column">
@@ -144,9 +59,11 @@ const MovieForm = ({ tagsList, genresList }) => {
           </div>
 
           <div className="four wide column">
-            <img
-              src="http://via.placeholder.com/250x250"
-              alt="New Film Poster"
+            <ReactImageFallback
+              src={movies.img}
+              fallbackImage="http://via.placeholder.com/250x250"
+              initialImage="http://via.placeholder.com/250x250"
+              alt={movies.title}
               className="ui image"
             />
           </div>
