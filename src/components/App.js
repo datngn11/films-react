@@ -57,7 +57,7 @@ function App() {
 
   const saveMovie = movie => (movie._id ? updateMovie(movie) : addMovie(movie));
 
-  const removeMovie = id => setMovies(movies.filter(m => m._id !== id));
+  const removeMovie = id => () => setMovies(movies.filter(m => m._id !== id));
 
   return (
     <div className="ui container">

@@ -15,6 +15,7 @@ const MovieCard = ({ movie }) => {
   const showConfirmDialog = () => {
     setDialogOn(true);
   };
+
   const hideConfirmDialog = () => {
     setDialogOn(false);
   };
@@ -50,25 +51,27 @@ const MovieCard = ({ movie }) => {
         <i className={`icon eye ${cls} link`} onClick={toggleDescription}></i>
       </div>
       <div className="extra content">
-        {!dialogOn ? (
-          <div className="ui two buttons">
-            <span className="ui green basic button" onClick={selectMovieForEdit(movie)}>
-              <i className="ui icon edit"></i>
-            </span>
-            <span className="ui red basic button" onClick={showConfirmDialog}>
-              <i className="ui icon trash"></i>
-            </span>
-          </div>
-        ) : (
-          <div className="ui two buttons">
-            <span className="ui green basic button" onClick={removeMovie(movie._id)}>
-              <i className="ui icon check" /> YES
-            </span>
-            <span className="ui red basic button" onClick={hideConfirmDialog}>
-              <i className="ui icon close" /> NO
-            </span>
-          </div>
-        )}
+        <div className="ui two buttons">
+          {!dialogOn ? (
+            <>
+              <span className="ui green basic button" onClick={selectMovieForEdit(movie)}>
+                <i className="ui icon edit"></i>
+              </span>
+              <span className="ui red basic button" onClick={showConfirmDialog}>
+                <i className="ui icon trash"></i>
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="ui green basic button" onClick={removeMovie(movie._id)}>
+                <i className="ui icon check" /> YES
+              </span>
+              <span className="ui red basic button" onClick={hideConfirmDialog}>
+                <i className="ui icon close" /> NO
+              </span>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
