@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function Message({ children, icon, color }) {
+function FallbackMessage({ children, icon, color }) {
   return (
     <div className={`ui icon ${color} message`}>
       <i className={`icon ${icon}`}></i>
@@ -12,15 +12,15 @@ function Message({ children, icon, color }) {
   );
 }
 
-Message.propTypes = {
+FallbackMessage.propTypes = {
   children: PropTypes.string.isRequired,
   icon: PropTypes.string,
   color: PropTypes.string
 };
 
-Message.defaultProps = {
+FallbackMessage.defaultProps = {
   color: "orange",
   icon: "bell"
 };
 
-export default Message;
+export default FallbackMessage;

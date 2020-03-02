@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import ReactImageFallback from "react-image-fallback";
+import FormMessage from "../messages/FormMessage";
 const inititalData = {
   title: "",
   director: "",
@@ -10,8 +12,9 @@ const inititalData = {
   description: ""
 };
 
-const MovieForm = ({ tagsList, genresList }) => {
+const MovieForm = ({ hideForm }) => {
   const [movies, setMovies] = useState(inititalData);
+  const [errors, setErrors] = useState({});
 
   const handleStringChange = ({ target }) => {
     setMovies({ ...movies, [target.name]: target.value });
@@ -25,9 +28,34 @@ const MovieForm = ({ tagsList, genresList }) => {
     setMovies({ ...movies, [target.name]: target.checked });
   };
 
+  const validateForm = data => {
+    const errors = {};
+
+    if (!data.title) {
+      errors.title = "Title cannot be blank";
+    }
+    if (!data.description) errors.description = "Description cannot be blank";
+    if (!data.duration) errors.duration = "Duration field cannot be blank";
+    if (!data.director) errors.director = "Director field cannot be blank";
+    if (!data.price) errors.price = "Price field cannot be blank ";
+    if (!data.img) errors.img = "Img field cannot be blank";
+
+    if (parseInt(data.duration) < 0) errors.duration = "Duration cannot be negative";
+    if (parseFloat(data.price) < 0) errors.price = "Price cannot be negative";
+
+    return errors;
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(movies);
+
+    const errors = validateForm(movies);
+    setErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      console.log(movies);
+      setMovies(inititalData);
+    }
   };
 
   return (
@@ -35,7 +63,7 @@ const MovieForm = ({ tagsList, genresList }) => {
       <form className="ui form">
         <div className="ui  grid">
           <div className="twelve wide column">
-            <div className="field error">
+            <div className={errors.title ? "field error" : "field"}>
               <label>Film title</label>
               <input
                 type="text"
@@ -44,17 +72,18 @@ const MovieForm = ({ tagsList, genresList }) => {
                 onChange={handleStringChange}
                 value={movies.title}
               />
-              <div style={{ color: "#9a3f38" }}>title error</div>
+              <FormMessage>{errors.title}</FormMessage>
             </div>
 
-            <div className="field">
+            <div className={errors.description ? "field error" : "field"}>
               <label>Film description</label>
               <textarea
                 name="description"
                 placeholder="film description"
                 onChange={handleStringChange}
                 value={movies.description}
-              ></textarea>
+              />
+              <FormMessage>{errors.description}</FormMessage>
             </div>
           </div>
 
@@ -68,19 +97,22 @@ const MovieForm = ({ tagsList, genresList }) => {
             />
           </div>
 
-          <div className="twelve wide column field">
-            <label>Image</label>
-            <input
-              type="text"
-              name="img"
-              placeholder="img"
-              value={movies.img}
-              onChange={handleStringChange}
-            />
+          <div className="twelve wide column ">
+            <div className={errors.img ? "field error" : "field"}>
+              <label>Image</label>
+              <input
+                type="text"
+                name="img"
+                placeholder="img"
+                value={movies.img}
+                onChange={handleStringChange}
+              />
+              <FormMessage>{errors.img}</FormMessage>
+            </div>
           </div>
 
           <div className="six wide column">
-            <div className="field">
+            <div className={errors.director ? "field error" : "field"}>
               <label>Director</label>
               <input
                 type="text"
@@ -89,11 +121,12 @@ const MovieForm = ({ tagsList, genresList }) => {
                 onChange={handleStringChange}
                 value={movies.director}
               />
+              <FormMessage>{errors.director}</FormMessage>
             </div>
           </div>
 
           <div className="six wide column">
-            <div className="field">
+            <div className={errors.duration ? "field error" : "field"}>
               <label>Duration</label>
               <input
                 type="number"
@@ -102,11 +135,12 @@ const MovieForm = ({ tagsList, genresList }) => {
                 onChange={handleNumberChange}
                 value={movies.duration}
               />
+              <FormMessage>{errors.duration}</FormMessage>
             </div>
           </div>
 
           <div className="six wide column">
-            <div className="field">
+            <div className={errors.price ? "field error" : "field"}>
               <label>Price</label>
               <input
                 type="number"
@@ -115,6 +149,7 @@ const MovieForm = ({ tagsList, genresList }) => {
                 onChange={handleNumberChange}
                 value={movies.price}
               />
+              <FormMessage>{errors.price}</FormMessage>
             </div>
           </div>
 
@@ -136,13 +171,17 @@ const MovieForm = ({ tagsList, genresList }) => {
             Save
           </button>
           <div className="or"></div>
-          <a href="#" className="ui button">
+          <a href="#" className="ui button" onClick={hideForm}>
             Hide form
           </a>
         </div>
       </form>
     </div>
   );
+};
+
+MovieForm.propTypes = {
+  hideForm: PropTypes.func.isRequired
 };
 
 export default MovieForm;

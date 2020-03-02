@@ -13,7 +13,7 @@ const MovieCard = ({ movie }) => {
   return (
     <div className="ui column card">
       {isOpen ? (
-        <div class="content">
+        <div className="content">
           <p>{movie.description}</p>
         </div>
       ) : (
@@ -36,8 +36,8 @@ const MovieCard = ({ movie }) => {
           </span>
         </div>
       </div>
-      <div class="content">
-        <i class={`icon eye ${cls} link`} onClick={toggleDescription}></i>
+      <div className="content">
+        <i className={`icon eye ${cls} link`} onClick={toggleDescription}></i>
       </div>
       <div className="extra content">
         <div className="ui two buttons">

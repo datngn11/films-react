@@ -1,15 +1,18 @@
 import React, { useState, useEffect, createContext } from "react";
-import { films as data, tags, genres,  } from "../data";
+import { films as data } from "../data";
 import _orderBy from "lodash/orderBy";
-import Message from "./messages/Message";
+import FallbackMessage from "./messages/FallbackMessage";
 import MovieList from "./movies/MovieList";
 import MovieForm from "./forms/MovieForm";
-
+import TopNavigation from "./nav/TopNavigation";
 
 export const AppContext = createContext();
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+
+  const cols = showAddForm ? "ten" : "sixteen";
 
   useEffect(() => {
     setMovies(sortMovies(data, ["featured", "title"], ["desc", "asc"]));
@@ -24,17 +27,29 @@ function App() {
       )
     );
 
+  const showForm = () => setShowAddForm(true);
+  const hideForm = () => setShowAddForm(false);
+
   return (
     <div className="ui container">
       {movies.length > 0 ? (
-        <MovieForm tagsList={tags} genresList={genres}/>
-        // <AppContext.Provider value={{ toggleFeatured }}>
-        //   <MovieList movies={movies} />
-        // </AppContext.Provider> 
+        <AppContext.Provider value={{ toggleFeatured }}>
+          <TopNavigation showForm={showForm} />
+          <div className="ui stackable grid">
+            {showAddForm && (
+              <div className="six wide column">
+                <MovieForm hideForm={hideForm} />
+              </div>
+            )}
+            <div className={`${cols} wide column`}>
+              <MovieList movies={movies} />
+            </div>
+          </div>
+        </AppContext.Provider>
       ) : (
-        <Message icon={"bell"} color={"olive"}>
+        <FallbackMessage icon={"bell"} color={"olive"}>
           There is no data yet
-        </Message>
+        </FallbackMessage>
       )}
     </div>
   );
