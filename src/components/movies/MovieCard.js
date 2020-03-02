@@ -1,15 +1,25 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useContext } from "react";
 import PropTypes from "prop-types";
 import Featured from "./Featured";
+import { MovieContext } from "../context/Context";
 
 const MovieCard = ({ movie }) => {
   const [isOpen, setIsOpen] = useState(false);
   const cls = isOpen ? "slash" : "";
-
   const toggleDescription = () => {
     setIsOpen(!isOpen);
   };
 
+  const [dialogOn, setDialogOn] = useState(false);
+
+  const showConfirmDialog = () => {
+    setDialogOn(true);
+  };
+  const hideConfirmDialog = () => {
+    setDialogOn(false);
+  };
+
+  const { selectMovieForEdit, removeMovie } = useContext(MovieContext);
   return (
     <div className="ui column card">
       {isOpen ? (
@@ -40,14 +50,25 @@ const MovieCard = ({ movie }) => {
         <i className={`icon eye ${cls} link`} onClick={toggleDescription}></i>
       </div>
       <div className="extra content">
-        <div className="ui two buttons">
-          <span className="ui red basic button">
-            <i className="ui icon check">YES</i>
-          </span>
-          <span className="ui grey basic button">
-            <i className="ui icon close">NO</i>
-          </span>
-        </div>
+        {!dialogOn ? (
+          <div className="ui two buttons">
+            <span className="ui green basic button" onClick={selectMovieForEdit(movie)}>
+              <i className="ui icon edit"></i>
+            </span>
+            <span className="ui red basic button" onClick={showConfirmDialog}>
+              <i className="ui icon trash"></i>
+            </span>
+          </div>
+        ) : (
+          <div className="ui two buttons">
+            <span className="ui green basic button" onClick={removeMovie(movie._id)}>
+              <i className="ui icon check" /> YES
+            </span>
+            <span className="ui red basic button" onClick={hideConfirmDialog}>
+              <i className="ui icon close" /> NO
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

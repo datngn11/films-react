@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 function MovieList({ movies }) {
   return (
-    <div className="ui three cards">
+    <div className="ui four cards">
       {movies.map(movie => (
         <MovieCard movie={movie} key={movie._id} />
       ))}

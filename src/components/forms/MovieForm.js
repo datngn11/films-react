@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ReactImageFallback from "react-image-fallback";
 import FormMessage from "../messages/FormMessage";
+
 const inititalData = {
   title: "",
   director: "",
@@ -12,9 +13,18 @@ const inititalData = {
   description: ""
 };
 
-const MovieForm = ({ hideForm, saveMovie }) => {
+const MovieForm = ({ hideForm, saveMovie, selectedMovie }) => {
   const [movie, setMovie] = useState(inititalData);
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (selectedMovie._id) {
+      setMovie(selectedMovie);
+    }
+    if (!selectedMovie._id && movie._id !== null) {
+      setMovie(inititalData);
+    }
+  }, [selectedMovie]);
 
   const handleStringChange = ({ target }) => {
     setMovie({ ...movie, [target.name]: target.value });
@@ -60,7 +70,7 @@ const MovieForm = ({ hideForm, saveMovie }) => {
 
   return (
     <div className="ui stackable grid">
-      <form className="ui form">
+      <form className="ui form" onSubmit={handleSubmit}>
         <div className="ui  grid">
           <div className="twelve wide column">
             <div className={errors.title ? "field error" : "field"}>
@@ -167,7 +177,7 @@ const MovieForm = ({ hideForm, saveMovie }) => {
         </div>
 
         <div className="ui fluid buttons">
-          <button className="ui button primary" type="submit" onClick={handleSubmit}>
+          <button className="ui button primary" type="submit">
             Save
           </button>
           <div className="or"></div>
@@ -182,7 +192,8 @@ const MovieForm = ({ hideForm, saveMovie }) => {
 
 MovieForm.propTypes = {
   hideForm: PropTypes.func.isRequired,
-  saveMovie: PropTypes.func.isRequired
+  saveMovie: PropTypes.func.isRequired,
+  selectedMovie: PropTypes.object
 };
 
 export default MovieForm;
