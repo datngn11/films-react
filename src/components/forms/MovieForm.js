@@ -12,20 +12,20 @@ const inititalData = {
   description: ""
 };
 
-const MovieForm = ({ hideForm }) => {
-  const [movies, setMovies] = useState(inititalData);
+const MovieForm = ({ hideForm, saveMovie }) => {
+  const [movie, setMovie] = useState(inititalData);
   const [errors, setErrors] = useState({});
 
   const handleStringChange = ({ target }) => {
-    setMovies({ ...movies, [target.name]: target.value });
+    setMovie({ ...movie, [target.name]: target.value });
   };
 
   const handleNumberChange = ({ target }) => {
-    setMovies({ ...movies, [target.name]: parseFloat(target.value) });
+    setMovie({ ...movie, [target.name]: parseFloat(target.value) });
   };
 
   const handleCheckboxChange = ({ target }) => {
-    setMovies({ ...movies, [target.name]: target.checked });
+    setMovie({ ...movie, [target.name]: target.checked });
   };
 
   const validateForm = data => {
@@ -49,12 +49,12 @@ const MovieForm = ({ hideForm }) => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    const errors = validateForm(movies);
+    const errors = validateForm(movie);
     setErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      console.log(movies);
-      setMovies(inititalData);
+      saveMovie(movie);
+      setMovie(inititalData);
     }
   };
 
@@ -70,7 +70,7 @@ const MovieForm = ({ hideForm }) => {
                 name="title"
                 placeholder="Movie title"
                 onChange={handleStringChange}
-                value={movies.title}
+                value={movie.title}
               />
               <FormMessage>{errors.title}</FormMessage>
             </div>
@@ -81,7 +81,7 @@ const MovieForm = ({ hideForm }) => {
                 name="description"
                 placeholder="film description"
                 onChange={handleStringChange}
-                value={movies.description}
+                value={movie.description}
               />
               <FormMessage>{errors.description}</FormMessage>
             </div>
@@ -89,10 +89,10 @@ const MovieForm = ({ hideForm }) => {
 
           <div className="four wide column">
             <ReactImageFallback
-              src={movies.img}
+              src={movie.img}
               fallbackImage="http://via.placeholder.com/250x250"
               initialImage="http://via.placeholder.com/250x250"
-              alt={movies.title}
+              alt={movie.title}
               className="ui image"
             />
           </div>
@@ -104,7 +104,7 @@ const MovieForm = ({ hideForm }) => {
                 type="text"
                 name="img"
                 placeholder="img"
-                value={movies.img}
+                value={movie.img}
                 onChange={handleStringChange}
               />
               <FormMessage>{errors.img}</FormMessage>
@@ -119,7 +119,7 @@ const MovieForm = ({ hideForm }) => {
                 name="director"
                 placeholder="film director"
                 onChange={handleStringChange}
-                value={movies.director}
+                value={movie.director}
               />
               <FormMessage>{errors.director}</FormMessage>
             </div>
@@ -133,7 +133,7 @@ const MovieForm = ({ hideForm }) => {
                 name="duration"
                 placeholder="Duration"
                 onChange={handleNumberChange}
-                value={movies.duration}
+                value={movie.duration}
               />
               <FormMessage>{errors.duration}</FormMessage>
             </div>
@@ -147,7 +147,7 @@ const MovieForm = ({ hideForm }) => {
                 name="price"
                 placeholder="price"
                 onChange={handleNumberChange}
-                value={movies.price}
+                value={movie.price}
               />
               <FormMessage>{errors.price}</FormMessage>
             </div>
@@ -159,8 +159,8 @@ const MovieForm = ({ hideForm }) => {
               type="checkbox"
               name="featured"
               id="featured"
-              checked={movies.featured}
-              value={movies.featured}
+              checked={movie.featured}
+              value={movie.featured}
               onChange={handleCheckboxChange}
             />
           </div>
@@ -181,7 +181,8 @@ const MovieForm = ({ hideForm }) => {
 };
 
 MovieForm.propTypes = {
-  hideForm: PropTypes.func.isRequired
+  hideForm: PropTypes.func.isRequired,
+  saveMovie: PropTypes.func.isRequired
 };
 
 export default MovieForm;

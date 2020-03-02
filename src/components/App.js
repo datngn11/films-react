@@ -5,6 +5,7 @@ import FallbackMessage from "./messages/FallbackMessage";
 import MovieList from "./movies/MovieList";
 import MovieForm from "./forms/MovieForm";
 import TopNavigation from "./nav/TopNavigation";
+import { generate } from "shortid";
 
 export const AppContext = createContext();
 
@@ -30,6 +31,11 @@ function App() {
   const showForm = () => setShowAddForm(true);
   const hideForm = () => setShowAddForm(false);
 
+  const saveMovie = movie => {
+    setMovies(sortMovies([...movies, { ...movie, _id: generate() }]));
+    setShowAddForm(false);
+  };
+
   return (
     <div className="ui container">
       {movies.length > 0 ? (
@@ -38,7 +44,7 @@ function App() {
           <div className="ui stackable grid">
             {showAddForm && (
               <div className="six wide column">
-                <MovieForm hideForm={hideForm} />
+                <MovieForm hideForm={hideForm} saveMovie={saveMovie} />
               </div>
             )}
             <div className={`${cols} wide column`}>
